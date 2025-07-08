@@ -1,0 +1,263 @@
+/* Body Background with Starry Space Theme */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: radial-gradient(ellipse at center, #000000 0%, #0a0a0a 100%);
+  color: white;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+/* Twinkling Stars */
+body::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(#ffffff 0.4px, transparent 0.4px);
+  background-size: 6px 6px;
+  animation: starsMove 300s linear infinite;
+  opacity: 0.06;
+  z-index: -6;
+}
+
+@keyframes starsMove {
+  from { background-position: 0 0; }
+  to { background-position: 0 1000px; }
+}
+
+/* Rocket Animation */
+.rocket {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  background: url('https://cdn-icons-png.flaticon.com/512/1098/1098779.png') no-repeat center;
+  background-size: contain;
+  top: 100%;
+  left: -100px;
+  animation: flyRocket 50s linear infinite;
+  z-index: -2;
+  pointer-events: none;
+}
+
+@keyframes flyRocket {
+  0% { transform: translate(0, 0) rotate(-45deg); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translate(200vw, -200vh) rotate(-45deg); opacity: 0; }
+}
+
+/* Planets & Saturn */
+.saturn {
+  position: absolute;
+  top: 50px;
+  left: 30px;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, #fdd835, #f57f17);
+  border-radius: 50%;
+  animation: floatPlanet 8s ease-in-out infinite;
+  z-index: -1;
+}
+
+.saturn::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 140px;
+  height: 20px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(255,255,255,0.2), transparent);
+  transform: translate(-50%, -50%) rotate(25deg);
+}
+
+.planet {
+  position: absolute;
+  border-radius: 50%;
+  animation: rotatePlanet 40s linear infinite;
+  z-index: -1;
+}
+
+.planet1 {
+  width: 40px;
+  height: 40px;
+  top: 20%;
+  right: 60px;
+  background: radial-gradient(circle, #8e24aa, #4a148c);
+}
+
+.planet2 {
+  width: 35px;
+  height: 35px;
+  bottom: 15%;
+  left: 50%;
+  background: radial-gradient(circle, #00bcd4, #006064);
+}
+
+@keyframes floatPlanet {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(10px); }
+}
+
+@keyframes rotatePlanet {
+  from { transform: rotate(0deg) translateX(0); }
+  to { transform: rotate(360deg) translateX(5px); }
+}
+
+/* Chat Container */
+.chat-container {
+  width: 90%;
+  max-width: 800px;
+  height: 85vh;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 0 40px rgba(0, 255, 255, 0.25);
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+  /* backdrop-filter: blur(5px); */
+}
+
+h2 {
+  text-align: center;
+  color: #00e5ff;
+  text-shadow: 0 0 5px #00e5ff;
+  font-size: 1.5rem;
+  margin-bottom: 14px;
+}
+
+/* Chat Box */
+.chat-box {
+  flex: 1;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #00e5ff;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 15px;
+  color: white;
+}
+
+.chat-bubble {
+  max-width: 85%;
+  padding: 12px 16px;
+  border-radius: 16px;
+  word-wrap: break-word;
+  line-height: 1.5;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+}
+
+.chat-bubble.user {
+  align-self: flex-end;
+  background-color: #1de9b6;
+  color: #004d40;
+  font-weight: bold;
+  border-bottom-right-radius: 0;
+}
+
+.chat-bubble.bot {
+  align-self: flex-start;
+  background-color: #1a237e;
+  color: #bbdefb;
+  border-left: 4px solid #00e5ff;
+  border-bottom-left-radius: 0;
+}
+
+.chat-img {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+}
+
+/* Input Controls */
+.input-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+input[type="text"] {
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: 30px;
+  border: 2px solid #00e5ff;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 15px;
+  outline: none;
+}
+
+button {
+  padding: 12px 16px;
+  background: #00e5ff;
+  color: black;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 0 10px #00e5ff;
+  transition: 0.2s ease;
+}
+
+button:hover {
+  background: #18ffff;
+  transform: scale(1.05);
+}
+
+/* Listening Indicator */
+.listening-indicator {
+  text-align: center;
+  font-weight: bold;
+  color: #ffeb3b;
+  display: none;
+  text-shadow: 0 0 8px #ffeb3b;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+  h2 {
+    font-size: 1.2rem;
+  }
+
+  .chat-container {
+    height: 95vh;
+    padding: 16px;
+  }
+
+  .input-container {
+    flex-direction: column;
+  }
+
+  input[type="text"],
+  button {
+    width: 100%;
+  }
+}
+/* User input area */
+input[type="text"] {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+}
+
+/* User chat bubble */
+.chat-bubble.user {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+}
+
+/* Bot chat bubble */
+.chat-bubble.bot {
+  font-family: 'Fira Code', monospace;
+  font-weight: 400;
+}

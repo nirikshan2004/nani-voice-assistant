@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Smart Chatbot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/static/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Fira+Code&display=swap" rel="stylesheet">
+
+</head>
+<body>
+  <!-- Space Animation Elements -->
+  <div class="rocket"></div>
+  <div class="saturn"></div>
+  <div class="planet planet1"></div>
+  <div class="planet planet2"></div>
+
+  <!-- Chat UI -->
+  <div class="chat-container">
+    <h2>Nani's Voice Assistant 🤖</h2>
+    <div class="listening-indicator" id="listeningIndicator">🎙️ Listening...</div>
+    <div id="chat-box" class="chat-box"></div>
+
+    <div class="input-container">
+      <input type="text" id="userInput" placeholder="Type something..." />
+      <button onclick="sendMessage()">Send</button>
+      <button onclick="startVoiceInput()">🎤</button>
+      <button onclick="readLastBotReply()">🔊</button>
+      <button onclick="stopSpeaking()">⏹️</button>
+    </div>
+  </div>
+
+</head>
+<body>
+
+  <script>
+    let lastBotResponse = "";
+    const synth = window.speechSynthesis;
+    let recognition;
+    let isListening = false;
+    let currentUtterance = null;
+    let manuallyStopped = false;
+
+    async function sendMessage(text = null) {
+      const userInput = document.getElementById("userInput");
+      const message = text || userInput.value.trim();
+      if (!message) return;
+
+      const chatBox = document.getElementById("chat-box");
+
+      const userBubble = document.createElement("div");
+      userBubble.className = "chat-bubble user";
+      userBubble.innerText = message;
+      chatBox.appendChild(userBubble);
+
+      const loadingBubble = document.createElement("div");
+      loadingBubble.className = "chat-bubble bot";
+      loadingBubble.innerText = "Typing...";
+      chatBox.appendChild(loadingBubble);
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      const res = await fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: message })
+      });
+
+      const data = await res.json();
+      chatBox.removeChild(loadingBubble);
+
+      const botBubble = document.createElement("div");
+      botBubble.className = "chat-bubble bot";
+      botBubble.innerHTML = data.response.replace(/\n/g, "<br>");
+      chatBox.appendChild(botBubble);
+
+      lastBotResponse = data.response;
+
+      if (data.images && data.images.length > 0) {
+        data.images.forEach(url => {
+          const img = document.createElement("img");
+          img.src = url;
+          img.className = "chat-img";
+          chatBox.appendChild(img);
+        });
+      }
+
+      chatBox.scrollTop = chatBox.scrollHeight;
+      userInput.value = "";
+    }
+
+    function initVoiceRecognition() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert("Speech Recognition not supported in this browser.");
+        return;
+      }
+
+      recognition = new SpeechRecognition();
+      recognition.lang = "en-US";
+      recognition.interimResults = false;
+      recognition.continuous = true;
+      recognition.maxAlternatives = 1;
+
+      recognition.onresult = (event) => {
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const transcriptRaw = event.results[i][0].transcript.trim();
+          const transcript = transcriptRaw.toLowerCase();
+          console.log("Heard:", transcript);
+
+          if (transcript.includes("read")) {
+            readLastBotReply();
+          } else if (transcript.includes("stop")) {
+            stopSpeaking();
+          } else {
+            sendMessage(transcriptRaw);
+          }
+        }
+      };
+
+      recognition.onerror = (event) => {
+        console.error("Voice error:", event.error);
+      };
+
+      recognition.onend = () => {
+        document.getElementById("listeningIndicator").style.display = "none";
+        if (!manuallyStopped) {
+          recognition.start();
+          document.getElementById("listeningIndicator").style.display = "block";
+        }
+      };
+    }
+
+    function startVoiceInput() {
+      if (isListening) return;
+      manuallyStopped = false;
+      initVoiceRecognition();
+      recognition.start();
+      isListening = true;
+      document.getElementById("listeningIndicator").style.display = "block";
+    }
+
+    function stopVoiceInput() {
+      if (recognition) {
+        manuallyStopped = true;
+        recognition.stop();
+        isListening = false;
+        document.getElementById("listeningIndicator").style.display = "none";
+      }
+    }
+
+    function readLastBotReply() {
+      if (!lastBotResponse) return;
+
+      stopSpeaking(); // cancel any ongoing speech first
+
+      currentUtterance = new SpeechSynthesisUtterance(lastBotResponse);
+      currentUtterance.lang = "en-US";
+      currentUtterance.rate = 1;
+      currentUtterance.pitch = 1;
+      currentUtterance.volume = 1;
+
+      synth.speak(currentUtterance);
+    }
+
+    function stopSpeaking() {
+      if (synth.speaking || synth.pending) {
+        synth.cancel();
+      }
+      if (currentUtterance) {
+        currentUtterance = null;
+      }
+    }
+  </script>
+</body>
+</html>
