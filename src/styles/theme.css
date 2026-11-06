@@ -1,0 +1,163 @@
+/* ============================================================
+   NEXT-LEVEL "HUMAN NEXT" CYBER HUD THEME SYSTEM
+   Colors:
+     • Jet Black (#06070a / #0a0a0a)
+     • Cerulean Blue (#007ba7 / #00d2ff)
+     • Neon Rose (#ff2d95 / #ff4da6)
+   ============================================================ */
+
+:root {
+  /* Core Obsidian Blacks */
+  --bg-black: #06070a;
+  --bg-surface: rgba(10, 12, 18, 0.78);
+  --bg-surface-elevated: rgba(16, 19, 30, 0.88);
+  --bg-surface-active: rgba(22, 27, 44, 0.95);
+
+  /* Cerulean Blue Spectrum */
+  --cerulean-dark: #004d6b;
+  --cerulean: #007ba7;
+  --cerulean-bright: #00b4d8;
+  --cerulean-neon: #00e5ff;
+  --cerulean-glow: rgba(0, 229, 255, 0.4);
+  --cerulean-glow-subtle: rgba(0, 180, 216, 0.15);
+
+  /* Neon Rose Spectrum */
+  --rose-dark: #800e46;
+  --rose: #ff2d95;
+  --rose-bright: #ff4da6;
+  --rose-neon: #ff007f;
+  --rose-glow: rgba(255, 45, 149, 0.45);
+  --rose-glow-subtle: rgba(255, 45, 149, 0.15);
+
+  /* HUD Accents & Cyber Grid */
+  --hud-border: rgba(0, 229, 255, 0.18);
+  --hud-border-active: rgba(255, 45, 149, 0.5);
+  --hud-grid: rgba(0, 229, 255, 0.04);
+  --hud-corner: #00e5ff;
+
+  /* Typography */
+  --font-main: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-mono: 'Fira Code', monospace;
+  --text-white: #ffffff;
+  --text-dim: #8b9bb4;
+  --text-muted: #4e5a70;
+
+  /* Radii */
+  --radius-hud: 22px;
+  --radius-card: 16px;
+  --radius-pill: 9999px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background: var(--bg-black);
+  color: var(--text-white);
+  font-family: var(--font-main);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Full Viewport App Container */
+.app-viewport {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  background: radial-gradient(circle at 10% 15%, rgba(0, 123, 167, 0.15), transparent 45%),
+              radial-gradient(circle at 90% 85%, rgba(255, 45, 149, 0.15), transparent 45%),
+              radial-gradient(ellipse at 50% 50%, #0d111c, var(--bg-black) 75%);
+}
+
+/* Cybernetic Ground Grid (Synthesized Holographic Grid Floor) */
+.cyber-grid-floor {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40vh;
+  background-image: 
+    linear-gradient(to right, rgba(0, 229, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 229, 255, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  transform: perspective(600px) rotateX(65deg);
+  transform-origin: bottom center;
+  mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%);
+  -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Main Futuristic Command Console */
+.chat-console {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 1080px;
+  height: 94vh;
+  max-height: 920px;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-surface);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid var(--hud-border);
+  border-radius: var(--radius-hud);
+  box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.95),
+              0 0 50px -10px var(--cerulean-glow-subtle),
+              0 0 50px -10px var(--rose-glow-subtle);
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Cyber Corner Brackets on HUD */
+.chat-console::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 14px;
+  height: 14px;
+  border-top: 2px solid var(--cerulean-neon);
+  border-left: 2px solid var(--cerulean-neon);
+  pointer-events: none;
+  z-index: 20;
+}
+
+.chat-console::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 14px;
+  height: 14px;
+  border-top: 2px solid var(--rose-bright);
+  border-right: 2px solid var(--rose-bright);
+  pointer-events: none;
+  z-index: 20;
+}
+
+/* Futuristic Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 229, 255, 0.2);
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--cerulean-neon);
+  box-shadow: 0 0 10px var(--cerulean-glow);
+}
